@@ -1,0 +1,26 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 06/24] Infinality 2.8 (src/autofit/aflatin.h)
+
+---
+ src/autofit/aflatin.h              |    3 +
+ 1 file changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/src/autofit/aflatin.h b/src/autofit/aflatin.h
+index d80e125..3ca779b 100644
+--- a/src/autofit/aflatin.h
++++ b/src/autofit/aflatin.h
+@@ -64,6 +64,9 @@ FT_BEGIN_HEADER
+ 
+ #define AF_LATIN_MAX_WIDTHS  16
+ 
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    extern FT_Pos infinality_cur_width;
++#endif
+ 
+ #define AF_LATIN_BLUE_ACTIVE      ( 1U << 0 ) /* zone height is <= 3/4px   */
+ #define AF_LATIN_BLUE_TOP         ( 1U << 1 ) /* we have a top blue zone   */
+-- 
+2.13.0
+

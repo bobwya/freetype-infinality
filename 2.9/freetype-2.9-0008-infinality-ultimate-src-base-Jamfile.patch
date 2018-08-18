@@ -1,0 +1,25 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: igrekster <igrek+github@fastem.com>
+Date: Thu, 21 Jun 2018 00:13:06 +1000
+Subject: [PATCH 08/24] Infinality 2.9 (src/base/Jamfile)
+
+---
+ src/base/Jamfile                   |    1 +
+ 1 file changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/src/base/Jamfile b/src/base/Jamfile
+index 4994c1b4c..e3ae751c1 100644
+--- a/src/base/Jamfile
++++ b/src/base/Jamfile
+@@ -58,7 +58,8 @@ SubDir  FT2_TOP $(FT2_SRC_DIR) base ;
+                     ftglyph
+                     ftgxval
+                     ftinit
++                    ftinf
+                     ftlcdfil
+                     ftmm
+                     ftotval
+                     ftpatent
+-- 
+2.17.1
+

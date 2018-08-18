@@ -1,0 +1,24 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 01/24] Infinality 2.8 (builds/freetype.mk)
+
+---
+ builds/freetype.mk                 |    1 +
+ 1 file changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/builds/freetype.mk b/builds/freetype.mk
+index f8cfd41..7e7ac5b 100644
+--- a/builds/freetype.mk
++++ b/builds/freetype.mk
+@@ -161,6 +161,7 @@ FT_CFLAGS  = $(CPPFLAGS) \
+              $(CFLAGS) \
+              $DFT2_BUILD_LIBRARY \
+              $DFT_CONFIG_MODULES_H="<ftmodule.h>" \
++			 $D_GNU_SOURCE \
+              $(FTOPTION_FLAG)
+ 
+ 
+-- 
+2.13.0
+

@@ -1,0 +1,26 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 09/24] Infinality 2.8 (src/base/ftbase.c)
+
+---
+ src/base/ftbase.c                  |    3 +
+ 1 file changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/src/base/ftbase.c b/src/base/ftbase.c
+index 55f7359..4d50dca 100644
+--- a/src/base/ftbase.c
++++ b/src/base/ftbase.c
+@@ -34,6 +34,9 @@
+ #include "ftstream.c"
+ #include "fttrigon.c"
+ #include "ftutil.c"
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++#include "ftinf.c"
++#endif
+ 
+ 
+ /* END */
+-- 
+2.13.0
+

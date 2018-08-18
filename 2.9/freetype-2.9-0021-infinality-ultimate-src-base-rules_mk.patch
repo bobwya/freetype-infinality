@@ -1,0 +1,24 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: igrekster <igrek+github@fastem.com>
+Date: Thu, 21 Jun 2018 00:13:06 +1000
+Subject: [PATCH 21/24] Infinality 2.9 (src/base/rules.mk)
+
+---
+ src/base/rules.mk                  |    1 +
+ 1 file changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/src/base/rules.mk b/src/base/rules.mk
+index e9805bd06..815daba0d 100644
+--- a/src/base/rules.mk
++++ b/src/base/rules.mk
+@@ -42,6 +42,7 @@ BASE_SRC := $(BASE_DIR)/basepic.c  \
+             $(BASE_DIR)/ftdbgmem.c \
+             $(BASE_DIR)/ftgloadr.c \
+             $(BASE_DIR)/fthash.c   \
++            $(BASE_DIR)/ftinf.c    \
+             $(BASE_DIR)/ftobjs.c   \
+             $(BASE_DIR)/ftoutln.c  \
+             $(BASE_DIR)/ftpic.c    \
+-- 
+2.17.1
+

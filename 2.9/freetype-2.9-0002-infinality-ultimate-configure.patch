@@ -1,0 +1,25 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: igrekster <igrek+github@fastem.com>
+Date: Thu, 21 Jun 2018 00:13:06 +1000
+Subject: [PATCH 02/24] Infinality 2.9 (configure)
+
+---
+ configure                          |    2 +
+ 1 file changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/configure b/configure
+index f9d218667..429d40e41 100755
+--- a/configure
++++ b/configure
+@@ -13,6 +13,8 @@
+ # Call the `configure' script located in `builds/unix'.
+ #
+ 
++export LDFLAGS="$LDFLAGS -lm"
++
+ rm -f config.mk builds/unix/unix-def.mk builds/unix/unix-cc.mk
+ 
+ # respect GNUMAKE environment variable for backward compatibility
+-- 
+2.17.1
+

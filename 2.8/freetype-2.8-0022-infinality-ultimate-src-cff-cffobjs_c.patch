@@ -1,0 +1,36 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 22/24] Infinality 2.8 (src/cff/cffobjs.c)
+
+---
+ src/cff/cffobjs.c                  |    6 +
+ 1 file changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/src/cff/cffobjs.c b/src/cff/cffobjs.c
+index 6161393..8c00aa9 100644
+--- a/src/cff/cffobjs.c
++++ b/src/cff/cffobjs.c
+@@ -39,6 +39,9 @@
+ 
+ #include "cfferrs.h"
+ 
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++#include "../base/ftinf.h"
++#endif
+ 
+   /*************************************************************************/
+   /*                                                                       */
+@@ -1172,6 +1175,9 @@
+ #endif
+ 
+     driver->no_stem_darkening = TRUE;
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    if(ftinf) driver->no_stem_darkening = !ftinf->stem_darkening_cff;
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+ 
+     driver->darken_params[0] = CFF_CONFIG_OPTION_DARKENING_PARAMETER_X1;
+     driver->darken_params[1] = CFF_CONFIG_OPTION_DARKENING_PARAMETER_Y1;
+-- 
+2.13.0
+

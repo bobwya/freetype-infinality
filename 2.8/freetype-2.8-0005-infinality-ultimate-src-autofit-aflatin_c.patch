@@ -1,0 +1,302 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 05/24] Infinality 2.8 (src/autofit/aflatin.c)
+
+---
+ src/autofit/aflatin.c              |  170 ++-
+ 1 file changed, 158 insertions(+), 12 deletions(-)
+
+diff --git a/src/autofit/aflatin.c b/src/autofit/aflatin.c
+index 11fa523..9036fc4 100644
+--- a/src/autofit/aflatin.c
++++ b/src/autofit/aflatin.c
+@@ -24,7 +24,10 @@
+ #include "afpic.h"
+ #include "aflatin.h"
+ #include "aferrors.h"
+-
++#include "strings.h"
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++#include "../base/ftinf.h"
++#endif
+ 
+ #ifdef AF_CONFIG_OPTION_USE_WARPER
+ #include "afwarp.h"
+@@ -40,6 +43,10 @@
+ #undef  FT_COMPONENT
+ #define FT_COMPONENT  trace_aflatin
+ 
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++FT_Pos infinality_cur_width = 0;
++#endif
++
+ 
+   /* needed for computation of round vs. flat segments */
+ #define FLAT_THRESHOLD( x )  ( x / 14 )
+@@ -1121,7 +1128,10 @@
+     FT_Pos        delta;
+     AF_LatinAxis  axis;
+     FT_UInt       nn;
+-
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    FT_Bool adjust_heights         = FALSE;
++    if(ftinf) adjust_heights=ftinf->autohint_increase_glyph_heights;
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+ 
+     if ( dim == AF_DIMENSION_HORZ )
+     {
+@@ -1149,7 +1159,7 @@
+     {
+       AF_LatinAxis  Axis = &metrics->axis[AF_DIMENSION_VERT];
+       AF_LatinBlue  blue = NULL;
+-
++      int threshold = 40;
+ 
+       for ( nn = 0; nn < Axis->blue_count; nn++ )
+       {
+@@ -1159,7 +1169,12 @@
+           break;
+         }
+       }
+-
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++      if ( adjust_heights                                       &&
++           metrics->root.scaler.face->size->metrics.x_ppem < 15 &&
++           metrics->root.scaler.face->size->metrics.x_ppem > 5  )
++        threshold = 52;
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+       if ( blue )
+       {
+         FT_Pos   scaled;
+@@ -1315,7 +1330,13 @@
+ 
+         /* a blue zone is only active if it is less than 3/4 pixels tall */
+         dist = FT_MulFix( blue->ref.org - blue->shoot.org, scale );
++
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++        /* Do at low ppems ( ~< 200 ), in order to prevent fringes */
++        if ( dist <= 256 && dist >= -256 )
++#else
+         if ( dist <= 48 && dist >= -48 )
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+         {
+ #if 0
+           FT_Pos  delta1;
+@@ -1366,7 +1387,12 @@
+             delta2 = -delta2;
+ 
+           blue->ref.fit   = FT_PIX_ROUND( blue->ref.cur );
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++          /* Round to prevent fringes */
++          blue->shoot.fit = FT_PIX_ROUND( blue->ref.fit - delta2 );
++#else
+           blue->shoot.fit = blue->ref.fit - delta2;
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+ 
+ #endif
+ 
+@@ -2504,7 +2530,10 @@
+               dist = edge->fpos - blue->shoot.org;
+               if ( dist < 0 )
+                 dist = -dist;
+-
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++              /* round down to pixels */
++              /*dist = FT_MulFix( dist, scale ) & ~63;*/
++#endif
+               dist = FT_MulFix( dist, scale );
+               if ( dist < best_dist )
+               {
+@@ -2680,8 +2709,17 @@
+     FT_Pos           dist     = width;
+     FT_Int           sign     = 0;
+     FT_Int           vertical = ( dim == AF_DIMENSION_VERT );
+-
+-
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    FT_Int           infinality_dist = 0;
++    FT_UInt          autohint_snap_stem_height = 0;
++    if( ftinf ) autohint_snap_stem_height=ftinf->autohint_snap_stem_height;
++    if ( autohint_snap_stem_height > 100 )
++        autohint_snap_stem_height = 100;
++    else if ( autohint_snap_stem_height < 0 )
++        autohint_snap_stem_height = 0;
++
++    if ( autohint_snap_stem_height == 0 )
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+     if ( !AF_LATIN_HINTS_DO_STEM_ADJUST( hints ) ||
+          axis->extra_light                       )
+       return width;
+@@ -2691,9 +2729,76 @@
+       dist = -width;
+       sign = 1;
+     }
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    /* Calculate snap value differently than standard freetype */
++    if ( autohint_snap_stem_height > 0                              &&
++         ( ( vertical && !AF_LATIN_HINTS_DO_VERT_SNAP( hints ) )  ||
++           ( !vertical && !AF_LATIN_HINTS_DO_HORZ_SNAP( hints ) ) ) )
++    {
++      infinality_dist = af_latin_snap_width( axis->widths,
++                                             axis->width_count, dist );
++
++      if ( metrics->root.scaler.face->size->metrics.x_ppem > 9 &&
++           axis->width_count > 0                               &&
++           abs( axis->widths[0].cur - infinality_dist ) < 32   &&
++           axis->widths[0].cur > 52                            )
++      {
++          const char *style_name=metrics->root.scaler.face->style_name;
++          if ( style_name!=NULL &&
++               ( strstr( style_name, "Regular" )      ||
++                 strstr( style_name, "Book" )         ||
++                 strstr( style_name, "Medium" )       ||
++                 strcmp( style_name, "Italic" ) == 0  ||
++                 strcmp( style_name, "Oblique" ) == 0 )
++              )
++         {
++          /* regular weight */
++          if ( axis->widths[0].cur < 64 )
++            infinality_dist = 64;
++          else if ( axis->widths[0].cur  < 88 )
++            infinality_dist = 64;
++          else if ( axis->widths[0].cur  < 160 )
++            infinality_dist = 128;
++          else if ( axis->widths[0].cur  < 240 )
++            infinality_dist = 190;
++          else infinality_dist = ( infinality_dist ) & ~63;
++        }
++        else
++        {
++          /* bold gets a different threshold */
++          if ( axis->widths[0].cur < 64 )
++            infinality_dist = 64 ;
++          else if ( axis->widths[0].cur  < 108 )
++            infinality_dist = 64;
++          else if ( axis->widths[0].cur  < 160 )
++            infinality_dist = 128;
++          else if ( axis->widths[0].cur  < 222 )
++            infinality_dist = 190;
++          else if ( axis->widths[0].cur  < 288 )
++            infinality_dist = 254;
++          else infinality_dist = ( infinality_dist + 16 ) & ~63;
++        }
+ 
+-    if ( (  vertical && !AF_LATIN_HINTS_DO_VERT_SNAP( hints ) ) ||
++      }
++      if ( infinality_dist < 52 )
++      {
++        if ( metrics->root.scaler.face->size->metrics.x_ppem < 9 )
++        {
++          if ( infinality_dist < 32 )
++            infinality_dist = 32;
++        }
++        else
++          infinality_dist = 64;
++      }
++    }
++    else if ( autohint_snap_stem_height < 100                            &&
++              ( ( vertical && !AF_LATIN_HINTS_DO_VERT_SNAP( hints ) )  ||
++                ( !vertical && !AF_LATIN_HINTS_DO_HORZ_SNAP( hints ) ) ) )
++#else
++
++    if ( ( vertical && !AF_LATIN_HINTS_DO_VERT_SNAP( hints ) ) ||
+          ( !vertical && !AF_LATIN_HINTS_DO_HORZ_SNAP( hints ) ) )
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+     {
+       /* smooth hinting process: very lightly quantize the stem width */
+ 
+@@ -2785,6 +2890,9 @@
+       }
+     }
+     else
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++      if ( autohint_snap_stem_height < 100 )
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+     {
+       /* strong hinting process: snap the stem width to integer pixels */
+ 
+@@ -2792,7 +2900,10 @@
+ 
+ 
+       dist = af_latin_snap_width( axis->widths, axis->width_count, dist );
+-
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++      if ( autohint_snap_stem_height > 0 )
++        goto Done_Width;
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+       if ( vertical )
+       {
+         /* in the case of vertical hinting, always round */
+@@ -2855,6 +2966,32 @@
+     }
+ 
+   Done_Width:
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    if ( axis->widths[0].cur > 42 )
++      /* weighted average */
++      dist = (dist * ( 100 - autohint_snap_stem_height )
++                + infinality_dist * autohint_snap_stem_height ) / 100;
++
++      {
++        int factor = 100;
++        if ( axis->standard_width < 100 )
++          factor = axis->standard_width;
++
++        if ( metrics->root.scaler.face->size->metrics.x_ppem >= 9  && dist < 52 )
++          dist += ( (52 - dist) * factor ) / 100;
++        if ( metrics->root.scaler.face->size->metrics.x_ppem < 9  && dist < 32 )
++          dist += ( (32 - dist) * factor ) / 100;
++
++        if ( axis->standard_width > 100                             &&
++             metrics->root.scaler.face->size->metrics.x_ppem >= 11  &&
++             dist < 64                                              )
++          dist = 64;
++        if ( axis->standard_width > 100                           &&
++             metrics->root.scaler.face->size->metrics.x_ppem >= 9 &&
++             dist < 52                                            )
++          dist = 52;
++      }
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+     if ( sign )
+       dist = -dist;
+ 
+@@ -2873,6 +3010,8 @@
+     FT_Pos  dist, base_delta;
+     FT_Pos  fitted_width;
+ 
++/* if fitted_width causes stem_edge->pos to land basically on top of an existing
++ * stem_edge->pos, then add or remove 64.  Need to figure out a way to do this */
+ 
+     dist       = stem_edge->opos - base_edge->opos;
+     base_delta = base_edge->pos - base_edge->opos;
+@@ -3485,8 +3624,11 @@
+     int       dim;
+ 
+     AF_LatinAxis  axis;
+-
+-
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    FT_Int    emboldening_strength = 0;
++    FT_Bool   use_various_tweaks = FALSE;
++    if( ftinf ) use_various_tweaks=ftinf->use_various_tweaks;
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+     error = af_glyph_hints_reload( hints, outline );
+     if ( error )
+       goto Exit;
+@@ -3556,7 +3698,11 @@
+     }
+ 
+     af_glyph_hints_save( hints, outline );
+-
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    {
++      infinality_cur_width = metrics->axis->widths[0].cur;
++    }
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+   Exit:
+     return error;
+   }
+-- 
+2.13.0
+

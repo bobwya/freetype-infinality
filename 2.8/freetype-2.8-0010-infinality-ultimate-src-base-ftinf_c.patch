@@ -1,0 +1,382 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 10/24] Infinality 2.8 (src/base/ftinf.c)
+
+---
+ src/base/ftinf.c                   |  363 +++++
+ 1 file changed, 363 insertions(+), 0 deletions(-)
+ create mode 100644 src/base/ftinf.c
+
+diff --git a/src/base/ftinf.c b/src/base/ftinf.c
+new file mode 100644
+index 0000000..5d6b7f6
+--- /dev/null
++++ b/src/base/ftinf.c
+@@ -0,0 +1,363 @@
++#include <stdlib.h>
++#include "ftinf.h"
++#define true  1
++#define false 0
++
++#define on  1
++#define off 0
++#define end (-128)
++
++#define sw2pv 18  /* STEM_WIDTH_2_PPEM */
++#define maxp 100  /* MAX_PPEM */
++
++typedef signed char pv;         /* ppm and values type */
++/* the arrays start with existence flag + values */
++typedef struct sa_rules_s {
++    const char *name;
++    pv always_use_100[1+4+1];
++    pv brightness[1+2+1];
++    pv contrast[1+2+1];
++    pv edge_detection[1+4+1];
++    pv m[1+4+1];
++    pv bearing_correction[1+2+1];
++    pv spacing[1+5+1];
++    pv start[1+5+1];
++    pv stem_scaling[1+6+1];
++    pv stem_translating[1+2+1];
++    pv stem_translating_only[1+10+1];
++    pv stem_widths[1+4];        /* these end with maxp */
++    pv synthesize_stems[1+2+1];
++} sa_rules_t;
++
++#pragma GCC diagnostic ignored "-Wpedantic" /* C99 struct initializer tags are needed */
++#pragma GCC diagnostic ignored "-Wunused-function"
++
++const ftinf_t *ftinf;
++/* final settings, updated from environment */
++ftinf_t _env;
++
++/* rules and hashing function */
++#include "ftinf_rh.c"
++
++/* rules selection */
++void ftinf_fill_stem_values( Stem_Data *stem_values,
++                             const char *family, int ppem, int use_known ){
++    /* set the defaults */
++    stem_values->bearing_correction = TRUE;
++    stem_values->brightness = 0.0;
++    stem_values->contrast = 0.0;
++    stem_values->edge_detection = FALSE;
++    stem_values->m = -1;
++    stem_values->stem_scaling = -1;
++    stem_values->stem_spacing = -1;
++    stem_values->stem_start = -1;
++    stem_values->stem_translating = 0;
++    stem_values->stem_translating_only = -1024;
++    stem_values->stem_width = -1;
++    stem_values->synth_stems = FALSE;
++    stem_values->use_100 = FALSE;
++    /* pick from known rules if requested and they exist for current family */
++    if( !use_known )
++        return;
++    else {
++        const sa_rules_t *r=ftinf_rules( family );
++        int i;
++        if( r==NULL ) return;
++        if( r->stem_widths[0]==on )
++            for( i=1; r->stem_widths[i]!=maxp; ++i )
++                if( ppem < r->stem_widths[i] ){
++                    stem_values->stem_width = i-1;
++                    break;
++                }
++
++        if( r->stem_scaling[0]==on )
++            for( i=1; r->stem_scaling[i]!=end; i+=2 )
++                if( ppem==r->stem_scaling[i] ){
++                    stem_values->stem_scaling = r->stem_scaling[i+1];
++                    break;
++                }
++
++        if( r->m[0]==on )
++            for( i=1; r->m[i]!=end; i+=2 )
++                if( ppem==r->m[i] ){
++                    stem_values->m = r->m[i+1];
++                    break;
++                }
++
++        if( r->stem_translating_only[0]==on )
++            for( i=1; r->stem_translating_only[i]!=end; i+=2 )
++                if( ppem==r->stem_translating_only[i] || r->stem_translating_only[i]==0 ){
++                    stem_values->stem_translating_only = r->stem_translating_only[i+1];
++                    break;
++                }
++
++        if( r->stem_translating[0]==on )
++            for( i=1; r->stem_translating[i]!=end; i+=2 )
++                if( ppem==r->stem_translating[i] || r->stem_translating[i]==0 ){
++                    stem_values->stem_translating = r->stem_translating[i+1];
++                    break;
++                }
++
++        if( r->always_use_100[0]==on )
++            for( i=1; r->always_use_100[i]!=end; i+=2 )
++                if( ppem>=r->always_use_100[i] && ppem<=r->always_use_100[i+1] ){
++                    stem_values->use_100 = TRUE;
++                    break;
++                }
++
++        if( r->synthesize_stems[0]==on )
++            for( i=1; r->synthesize_stems[i]!=end; i+=2 )
++                if( ppem>=r->synthesize_stems[i] && ppem<=r->synthesize_stems[i+1] ){
++                    stem_values->synth_stems = TRUE;
++                    break;
++                }
++
++        if( r->edge_detection[0]==on )
++            for( i=1; r->edge_detection[i]!=end; i+=2 )
++                if( ppem>=r->edge_detection[i] && ppem<=r->edge_detection[i+1] ){
++                    stem_values->edge_detection = TRUE;
++                    break;
++                }
++
++        if( r->bearing_correction[0]==on )
++            for( i=1; r->bearing_correction[i]!=end; i+=2 )
++                if( ppem>=r->bearing_correction[i] && ppem<=r->bearing_correction[i+1] ){
++                    stem_values->bearing_correction = FALSE;
++                    break;
++                }
++
++#if(0)
++        if( r->brightness[0]==on )
++            for( i=1; r->brightness[i]!=end; i+=2 )
++                if( ppem==r->brightness[i]||r->brightness[i]==0 ){
++                    stem_values->brightness=r->brightness[i+1]*(1.0f/300.0f);
++                    break;
++                }
++
++        if( r->contrast[0]==on )
++            for( i=1; r->contrast[i]!=end; i+=2 )
++                if( ppem==r->contrast[i]||r->contrast[i]==0 ){
++                    stem_values->contrast=r->contrast[i+1]*(1.0f/300.0f);
++                    break;
++                }
++        if( r->spacing[0]==on ){
++            /* not used by original code */
++        }
++        if( r->start[0]==on ){
++            /* not used by original code */
++        }
++#endif
++    }
++    return;
++}
++
++void ftinf_get_bc( const char *family, int ppem, float *brightness, float *contrast ){
++    const sa_rules_t *r=ftinf_rules( family );
++    *brightness=0;
++    *contrast=0;
++    if( r ){
++        int i;
++        if( r->brightness[0]==on )
++            for( i=1; r->brightness[i]!=end; i+=2 )
++                if( ppem==r->brightness[i]||r->brightness[i]==0 ){
++                    *brightness=r->brightness[i+1]*(1.0f/300.0f);
++                    break;
++                }
++
++        if( r->contrast[0]==on )
++            for( i=1; r->contrast[i]!=end; i+=2 )
++                if( ppem==r->contrast[i]||r->contrast[i]==0 ){
++                    *contrast=r->contrast[i+1]*(1.0f/300.0f);
++                    break;
++                }
++    }
++    return;
++}
++
++static int
++bool_val( const char *s ){
++    if ( s != NULL )
++        return strcasecmp(s, "true") == 0
++            || strcasecmp(s, "1") == 0
++            || strcasecmp(s, "on") == 0
++            || strcasecmp(s, "yes") ==0;
++    else
++        return 0;
++}
++
++static int
++int_val( const char *s, int min, int max ){
++    int val;
++    sscanf ( s, "%d", &val );
++    if ( val > max )
++        val = max;
++    else if ( val < min )
++        val = min;
++    return val;
++}
++
++/* settings and hashing function */
++#include "ftinf_sh.c"
++
++/*
++  Get active Infinality settings
++ */
++void ftinf_env(){
++    const char *s;
++    ftinf=ftinf_settings( getenv( "INFINALITY_FT" ) );
++
++    if( ftinf==NULL ){
++        ftinf=ftinf_settings( "ultimate3" );
++        /* this should always succeed */
++#if(0)
++        if( ftinf==NULL ){
++            /* put an error here */
++            exit(-1);
++        }
++#endif
++    }
++    _env=ftinf[0];      /* copy as defaults */
++
++    /* check if custom environment values are set and update with them */
++    s=getenv( "INFINALITY_FT_AUTOHINT_INCREASE_GLYPH_HEIGHTS" );
++    if( s ) _env.autohint_increase_glyph_heights=bool_val( s );
++    s=getenv( "INFINALITY_FT_AUTOHINT_SNAP_STEM_HEIGHT" );
++    if( s ) _env.autohint_snap_stem_height=int_val( s, 0, 100 );
++    s=getenv( "INFINALITY_FT_USE_VARIOUS_TWEAKS" );
++    if( s ) _env.use_various_tweaks=bool_val( s );
++    s=getenv( "INFINALITY_FT_USE_KNOWN_SETTINGS_ON_SELECTED_FONTS" );
++    if( s ) _env.use_known_settings_on_selected_fonts=bool_val(s);
++#if(0)                          /* not used (naming error also) */
++    s=getenv( "INFINALITY_FT_AUTOHINT_MINIMUM_STEM_WIDTH" );
++    if( s ) _env.autohint_minimum_stem_height=int_val( s, 0, 100 );
++#endif
++    s=getenv( "INFINALITY_FT_STEM_SNAPPING_SLIDING_SCALE" );
++    if( s ) sscanf( s, "%d", &_env.stem_snapping_sliding_scale );
++    s=getenv( "INFINALITY_FT_STEM_ALIGNMENT_STRENGTH" );
++    if( s ) sscanf( s, "%d", &_env.stem_alignment_strength );
++    s=getenv( "INFINALITY_FT_STEM_DARKENING_AUTOFIT" );
++    if( s ) _env.stem_darkening_autofit=bool_val( s );
++    s=getenv( "INFINALITY_FT_STEM_DARKENING_CFF" );
++    if( s ) _env.stem_darkening_cff=bool_val( s );
++    s=getenv( "INFINALITY_FT_STEM_FITTING_STRENGTH" );
++    if( s ) sscanf( s, "%d", &_env.stem_fitting_strength );
++    s=getenv( "INFINALITY_FT_CHROMEOS_STYLE_SHARPENING_STRENGTH" );
++    if( s ) _env.chromeos_style_sharpening_strength=int_val( s, 0, 100 );
++    s=getenv( "INFINALITY_FT_BRIGHTNESS" );
++    if( s ) sscanf( s, "%d", &_env.brightness );
++    s=getenv( "INFINALITY_FT_CONTRAST" );
++    if( s ) sscanf( s, "%d", &_env.contrast );
++    s=getenv( "INFINALITY_FT_WINDOWS_STYLE_SHARPENING_STRENGTH" );
++    if( s ) _env.windows_style_sharpening_strength=int_val( s, 0, 100 );
++    s=getenv( "INFINALITY_FT_GAMMA_CORRECTION" );
++    if( s ){
++        float *f=_env.gamma_correction;
++        sscanf ( s, "%f %f", &f[0], &f[1] );
++        if( f[1] < 1.0f ) f[1]=1.0f;
++    }
++    s=getenv( "INFINALITY_FT_FRINGE_FILTER_STRENGTH" );
++    if( s ) sscanf( s, "%d", &_env.fringe_filter_strength );
++    s=getenv( "INFINALITY_FT_GRAYSCALE_FILTER_STRENGTH" );
++    if( s ) sscanf( s, "%d", &_env.grayscale_filter_strength );
++    s=getenv( "INFINALITY_FT_AUTOHINT_HORIZONTAL_STEM_DARKEN_STRENGTH" );
++    if( s ) sscanf( s, "%d", &_env.autohint_horizontal_stem_darken_strength );
++    s=getenv( "INFINALITY_FT_AUTOHINT_VERTICAL_STEM_DARKEN_STRENGTH" );
++    if( s ) sscanf( s, "%d", &_env.autohint_vertical_stem_darken_strength );
++    s=getenv( "INFINALITY_FT_GLOBAL_EMBOLDEN_X_VALUE" );
++    if( s ) sscanf( s, "%d", &_env.global_embolden_x_value );
++    s=getenv( "INFINALITY_FT_GLOBAL_EMBOLDEN_Y_VALUE" );
++    if( s ) sscanf( s, "%d", &_env.global_embolden_y_value );
++    s=getenv( "INFINALITY_FT_BOLD_EMBOLDEN_X_VALUE" );
++    if( s ) sscanf( s, "%d", &_env.bold_embolden_x_value );
++    s=getenv( "INFINALITY_FT_BOLD_EMBOLDEN_Y_VALUE" );
++    if( s ) sscanf( s, "%d", &_env.bold_embolden_y_value );
++    s=getenv( "INFINALITY_FT_FILTER_PARAMS" );
++    if( s ) {
++        int *f=_env.filter_params;
++        if( sscanf( s, "%d %d %d %d %d", f+1, f+2, f+3, f+4, f+5 )==5 )
++            f[0]=on;
++        else
++            f[0]=off;           /* FIXME: put a warning? */
++    }
++    /* do the range verifications as in original code */
++    if ( _env.stem_snapping_sliding_scale > maxp )
++        _env.stem_snapping_sliding_scale = 0;
++    else if ( _env.stem_snapping_sliding_scale < 0 )
++        _env.stem_snapping_sliding_scale = 0;
++    if (_env.stem_snapping_sliding_scale < 11 &&
++        _env.stem_snapping_sliding_scale > 0  )
++        _env.stem_snapping_sliding_scale = 11;
++
++    if ( _env.stem_alignment_strength > 100 )
++        _env.stem_alignment_strength = 100;
++    else if ( _env.stem_alignment_strength < 0 )
++        _env.stem_alignment_strength = 0;
++
++    if ( _env.stem_fitting_strength > 100 )
++        _env.stem_fitting_strength = 100;
++    else if ( _env.stem_fitting_strength < 0 )
++        _env.stem_fitting_strength = 0;
++
++    if ( _env.chromeos_style_sharpening_strength > 100 )
++        _env.chromeos_style_sharpening_strength = 100;
++    else if ( _env.chromeos_style_sharpening_strength < 0 )
++        _env.chromeos_style_sharpening_strength = 0;
++
++    if ( _env.brightness > 100 )
++        _env.brightness = 100;
++    else if ( _env.brightness < -100 )
++        _env.brightness = 0;
++
++    if ( _env.contrast > 100 )
++        _env.contrast = 100;
++    else if ( _env.contrast < -100 )
++        _env.contrast = 0;
++
++    if ( _env.windows_style_sharpening_strength > 100 )
++        _env.windows_style_sharpening_strength = 100;
++    else if ( _env.windows_style_sharpening_strength < 0 )
++        _env.windows_style_sharpening_strength = 0;
++
++    if ( _env.fringe_filter_strength > 100 )
++        _env.fringe_filter_strength = 100;
++    else if ( _env.fringe_filter_strength < 0 )
++        _env.fringe_filter_strength = 0;
++
++    if ( _env.grayscale_filter_strength > 100 )
++        _env.grayscale_filter_strength = 100;
++    else if ( _env.grayscale_filter_strength < 0 )
++        _env.grayscale_filter_strength = 0;
++
++    if ( _env.autohint_horizontal_stem_darken_strength > 100 )
++        _env.autohint_horizontal_stem_darken_strength = 100;
++    else if ( _env.autohint_horizontal_stem_darken_strength < 0 )
++        _env.autohint_horizontal_stem_darken_strength = 0;
++
++    if ( _env.autohint_vertical_stem_darken_strength > 100 )
++        _env.autohint_vertical_stem_darken_strength = 100;
++    else if ( _env.autohint_horizontal_stem_darken_strength < 0 )
++        _env.autohint_vertical_stem_darken_strength = 0;
++
++    if ( _env.global_embolden_x_value > 128 )
++        _env.global_embolden_x_value = 128;
++    else if ( _env.global_embolden_x_value < -128 )
++        _env.global_embolden_x_value = -128;
++
++    if ( _env.global_embolden_y_value > 128 )
++        _env.global_embolden_y_value = 128;
++    else if ( _env.global_embolden_y_value < -128 )
++          _env.global_embolden_y_value = -128;
++
++    if ( _env.bold_embolden_x_value > 128 )
++        _env.bold_embolden_x_value = 128;
++    else if (_env.bold_embolden_x_value < -128 )
++        _env.bold_embolden_x_value = -128;
++
++    if ( _env.bold_embolden_y_value > 128 )
++        _env.bold_embolden_y_value = 128;
++    else if ( _env.bold_embolden_y_value < -128 )
++        _env.bold_embolden_y_value = -128;
++
++    /* point to the combined and checked settings */
++    ftinf=&_env;
++}
+-- 
+2.13.0
+

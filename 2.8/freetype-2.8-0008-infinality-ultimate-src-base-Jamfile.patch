@@ -1,0 +1,24 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 08/24] Infinality 2.8 (src/base/Jamfile)
+
+---
+ src/base/Jamfile                   |    1 +
+ 1 file changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/src/base/Jamfile b/src/base/Jamfile
+index 9e9a91b..5217651 100644
+--- a/src/base/Jamfile
++++ b/src/base/Jamfile
+@@ -56,6 +56,7 @@ SubDir  FT2_TOP $(FT2_SRC_DIR) base ;
+                     ftglyph
+                     ftgxval
+                     ftinit
++                    ftinf
+                     ftlcdfil
+                     ftmm
+                     ftotval
+-- 
+2.13.0
+

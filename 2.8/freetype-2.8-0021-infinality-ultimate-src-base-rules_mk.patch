@@ -1,0 +1,24 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 21/24] Infinality 2.8 (src/base/rules.mk)
+
+---
+ src/base/rules.mk                  |    1 +
+ 1 file changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/src/base/rules.mk b/src/base/rules.mk
+index 2a1e93c..1a38d49 100644
+--- a/src/base/rules.mk
++++ b/src/base/rules.mk
+@@ -42,6 +42,7 @@ BASE_SRC := $(BASE_DIR)/basepic.c  \
+             $(BASE_DIR)/ftdbgmem.c \
+             $(BASE_DIR)/ftgloadr.c \
+             $(BASE_DIR)/fthash.c   \
++            $(BASE_DIR)/ftinf.c    \
+             $(BASE_DIR)/ftobjs.c   \
+             $(BASE_DIR)/ftoutln.c  \
+             $(BASE_DIR)/ftpic.c    \
+-- 
+2.13.0
+

@@ -1,0 +1,33 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: igrekster <igrek+github@fastem.com>
+Date: Thu, 21 Jun 2018 00:13:06 +1000
+Subject: [PATCH 03/24] Infinality 2.9.1 (devel/ftoption.h)
+
+---
+ devel/ftoption.h                   |   10 +
+ 1 file changed, 10 insertions(+), 0 deletions(-)
+
+diff --git a/devel/ftoption.h b/devel/ftoption.h
+index 1b4619eb0..33fa15dda 100644
+--- a/devel/ftoption.h
++++ b/devel/ftoption.h
+@@ -581,6 +581,16 @@ FT_BEGIN_HEADER
+   /*                                                                       */
+ #define TT_CONFIG_OPTION_BYTECODE_INTERPRETER
+ 
++  /*************************************************************************/
++  /*                                                                       */
++  /* Define FT_CONFIG_OPTION_INFINALITY_PATCHSET if you want to enable     */
++  /* all additional infinality patches, which are configured via env       */
++  /* variables.                                                            */
++  /*                                                                       */
++  /*   This option requires TT_CONFIG_OPTION_SUBPIXEL_HINTING to           */
++  /*   defined.                                                            */
++  /*                                                                       */
++#define FT_CONFIG_OPTION_INFINALITY_PATCHSET
+ 
+   /*************************************************************************/
+   /*                                                                       */
+-- 
+2.17.1
+

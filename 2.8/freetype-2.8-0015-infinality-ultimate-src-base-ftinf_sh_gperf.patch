@@ -1,0 +1,283 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 15/24] Infinality 2.8 (src/base/ftinf_sh.gperf)
+
+---
+ src/base/ftinf_sh.gperf            |  264 ++++
+ 1 file changed, 264 insertions(+), 0 deletions(-)
+ create mode 100644 src/base/ftinf_sh.gperf
+
+diff --git a/src/base/ftinf_sh.gperf b/src/base/ftinf_sh.gperf
+new file mode 100644
+index 0000000..5f6e0ae
+--- /dev/null
++++ b/src/base/ftinf_sh.gperf
+@@ -0,0 +1,264 @@
++%struct-type
++%define slot-name name
++%enum
++%switch=1
++%readonly-tables
++%omit-struct-type
++%define lookup-function-name   _settings_get
++%define hash-function-name _settings_hash
++%{
++#include <ctype.h>
++static const struct ftinf_s* _settings_get( const char*str, unsigned len);
++%}
++struct ftinf_s;
++%%
++{   .name="custom",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 8, 24, 48, 24, 8},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=75,
++    .stem_fitting_strength=50,
++    .stem_snapping_sliding_scale=30,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true
++},
++{   .name="classic",
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .filter_params={on, 6, 25, 38, 25, 6},
++    .gamma_correction={0, 100},
++    .use_various_tweaks=true
++},
++{   .name="disabled",
++    .gamma_correction={0, 100},
++},
++{   .name="ipad",
++    .filter_params={on, 0, 0, 100, 0, 0},
++    .gamma_correction={1000, 80},
++    .grayscale_filter_strength=100
++},
++{   .name="infinality",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=25,
++    .stem_fitting_strength=25,
++    .stem_snapping_sliding_scale=40,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=5
++},
++{   .name="linux",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 6, 25, 44, 25, 6},
++    .gamma_correction={0, 100},
++    .use_various_tweaks=true
++},
++{   .name="nudge",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=25,
++    .stem_fitting_strength=15,
++    .stem_snapping_sliding_scale=30,
++    .use_various_tweaks=true,
++},
++{   .name="osx",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_vertical_stem_darken_strength=25,
++    .bold_embolden_x_value=16,
++    .brightness=10,
++    .contrast=20,
++    .filter_params={on, 3, 32, 38, 32, 3},
++    .gamma_correction={1000, 80},
++    .global_embolden_y_value=8,
++    .grayscale_filter_strength=25,
++},
++{   .name="push",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=75,
++    .stem_fitting_strength=50,
++    .stem_snapping_sliding_scale=30,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true
++},
++{   .name="sharpened",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=25,
++    .stem_fitting_strength=25,
++    .stem_snapping_sliding_scale=40,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=65
++},
++{   .name="shove",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=100,
++    .stem_fitting_strength=100,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true
++},
++{   .name="ubuntu",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_vertical_stem_darken_strength=25,
++    .brightness=-10,
++    .contrast=15,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={1000, 80},
++    .use_various_tweaks=true
++},
++{   .name="ultimate1",
++    .filter_params={on, 4, 22, 38, 22, 4},
++    .fringe_filter_strength=25,
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=25
++},
++{   .name="ultimate2",
++    .filter_params={on, 6, 22, 36, 22, 6},
++    .fringe_filter_strength=25,
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=25
++},
++{   .name="ultimate3",
++    .filter_params={on, 8, 24, 36, 24, 8},
++    .fringe_filter_strength=25,
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=25
++},
++{   .name="ultimate4",
++    .filter_params={on, 10, 25, 37, 25, 10},
++    .fringe_filter_strength=25,
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=25
++},
++{   .name="ultimate5",
++    .filter_params={on, 12, 28, 42, 28, 12},
++    .fringe_filter_strength=25,
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=25
++},
++{   .name="vanilla",
++    .filter_params={on, 6, 25, 38, 25, 6},
++    .gamma_correction={0, 100},
++},
++{   .name="windows7light",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .contrast=20,
++    .filter_params={on, 20, 25, 38, 25, 05},
++    .fringe_filter_strength=100,
++    .gamma_correction={1000, 160},
++    .stem_snapping_sliding_scale=30,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=100
++},
++{   .name="windows7",
++    .filter_params={on, 20, 25, 42, 25, 06},
++    .fringe_filter_strength=100,
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_vertical_stem_darken_strength=25,
++    .windows_style_sharpening_strength=65,
++    .gamma_correction={1000, 120},
++    .brightness=10,
++    .contrast=20,
++    .use_various_tweaks=true,
++    .autohint_snap_stem_height=100,
++    .use_known_settings_on_selected_fonts=true,
++},
++{   .name="windowsxp",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .brightness=10,
++    .contrast=20,
++    .filter_params={on, 6, 25, 44, 25, 6},
++    .fringe_filter_strength=100,
++    .gamma_correction={1000, 120},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .stem_snapping_sliding_scale=30,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=65
++},
++{   .name="windowsxplight",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .brightness=20,
++    .contrast=30,
++    .filter_params={on, 6, 25, 44, 25, 6},
++    .fringe_filter_strength=100,
++    .gamma_correction={1000, 120},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .stem_snapping_sliding_scale=30,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=65
++},
++%%
++
++static const ftinf_t*
++ftinf_settings( const char *name ){
++    if( name ){
++        enum {
++            max_wlen=31
++        };
++        char buf[max_wlen+1];
++        int len=strlen( name );
++        if( len <= max_wlen ){
++            int i;
++            for( i=0; i<len; ++i )
++                buf[i]=tolower( name[i] );
++            buf[len]='\0';
++            return _settings_get( buf, len );
++        }
++    }
++    return NULL;
++}
++/*
++   gperf --output-file=ftinf_sh.c ftinf_sh.gperf
++*/
+-- 
+2.13.0
+

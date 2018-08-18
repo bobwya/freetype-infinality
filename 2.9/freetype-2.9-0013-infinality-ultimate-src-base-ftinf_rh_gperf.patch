@@ -1,0 +1,302 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: igrekster <igrek+github@fastem.com>
+Date: Thu, 21 Jun 2018 00:13:06 +1000
+Subject: [PATCH 13/24] Infinality 2.9 (src/base/ftinf_rh.gperf)
+
+---
+ src/base/ftinf_rh.gperf            |  283 +++
+ 1 file changed, 283 insertions(+), 0 deletions(-)
+ create mode 100644 src/base/ftinf_rh.gperf
+
+diff --git a/src/base/ftinf_rh.gperf b/src/base/ftinf_rh.gperf
+new file mode 100644
+index 000000000..9fd8aab95
+--- /dev/null
++++ b/src/base/ftinf_rh.gperf
+@@ -0,0 +1,283 @@
++%struct-type
++%define slot-name name
++%enum
++%switch=1
++%readonly-tables
++%omit-struct-type
++%define lookup-function-name  _rules_get
++%define hash-function-name _rules_hash
++%{
++#include <ctype.h>
++static const struct sa_rules_s* _rules_get( const char*str, unsigned len );
++%}
++struct sa_rules_s;
++%%
++{   .name="---",
++    .synthesize_stems={on, 13, 13, end}
++},
++{   .name="andale mono",
++    .always_use_100={on, 0, maxp, end},
++    .stem_scaling={on, 11, 1, end},
++    .stem_widths={on, 10, 21, maxp,}
++},
++{   .name="arial narrow",
++    .stem_widths={on, 10, 21, maxp,}
++},
++{   .name="arial unicode ms",
++    .always_use_100={on, 0, maxp, end},
++    .stem_translating={on, 11, 32, end},
++    .stem_translating_only={on, 10, 16, 8, 32, 9, 32, end}
++},
++{   .name="arial",
++    .always_use_100={on, 0, maxp, end},
++    .edge_detection={on, 11, 11, 13, 13, end},
++    .spacing={on, 10, 11, 23, 25, 30, end},
++    .start={on, 11, 18, 23, 30, 30, end},
++    .stem_translating={on, 11, 32, end},
++    .stem_translating_only={on, 10, 16, 8, 32, 9, 32, 16, -24, end}
++},
++{   .name="arimo",
++    .always_use_100={on, 0, maxp, end},
++    .stem_translating={on, 11, 32, end},
++    .stem_translating_only={on, 10, 8, 8, 32, 9, 32, end}
++},
++{   .name="baskerville",
++    .brightness={on, 0, -20, end},
++    .contrast={on, 0, 25, end}
++},
++{   .name="bitstream vera sans mono",
++    .always_use_100={on, 0, maxp, end}
++},
++{   .name="bitstream vera sans",
++    .always_use_100={on, 10, 14, 16, 17, end},
++    .m={on, 12, 0, end},
++    .stem_scaling={on ,12, 1, end},
++    .stem_translating_only={on, 8, 16, end}
++},
++{   .name="calibri",
++    .always_use_100={on, 23, maxp, end},
++    .stem_scaling={on, 15, 1, 17, 1, 18, 1, end},
++    .stem_translating_only={on, 10, 16, 15, 0, end},
++    .stem_widths={on, 1, 10, 19, maxp,}
++},
++{   .name="candara",
++    .stem_scaling={on, 14, 1, 17, 1, end},
++    .stem_translating_only={on, 10, 16, end}
++},
++{   .name="cantarell",
++    .stem_translating_only={on, 11, 0, 12, 0, end},
++    .stem_widths={on, 10, 22, maxp,}
++},
++{   .name="canwell",
++    .stem_scaling={on, 13, 0, end}
++},
++{   .name="century gothic",
++    .stem_widths={on, 10, 22, maxp,}
++},
++{   .name="comfortaa",
++    .stem_widths={on, 10, 19, 22, maxp},
++    .stem_scaling={on, 11, 0, end}
++},
++{   .name="consolas",
++    .always_use_100={on, 0, maxp, end},
++    .stem_translating_only={on, 8, 32, 9, 32, end},
++    .stem_widths={on, 10, 20, maxp,},
++    .stem_scaling={on, 11, 1, end}
++},
++{   .name="corbel",
++    .stem_translating_only={on, 10, 16, end},
++    .stem_widths={on, 10, 21, maxp}
++},
++{   .name="courier new",
++    .always_use_100={on, 12, 12, end},
++    .edge_detection={on, 10, 12, end},
++    .m={on, 13, 1, 14, 1, end}
++},
++{   .name="courier",
++    .always_use_100={on, 0, maxp, end},
++    .m={on, 13, 1, 14, 1, end},
++    .stem_translating_only={on, 13, 16, 15, 0, end}
++},
++{   .name="cousine",
++    .always_use_100={on, 0, maxp, end}
++},
++{   .name="dejavu sans mono",
++    .always_use_100={on, 0, maxp, end},
++    .stem_translating_only={on, 7, 16, 8, 32, 9, 16, end}
++},
++{   .name="dejavu sans",
++    .always_use_100={on, 10, 14, 16, 17, end},
++    .m={on, 12, 0, end},
++    .stem_scaling={on, 12, 1, end},
++    .stem_translating_only={on, 8, 16, 15, -20, end}
++},
++{   .name="droid sans mono",
++    .m={on, 12, 0, end}
++},
++{   .name="droid sans",
++    .always_use_100={on, 12, 12, 15, 15, end},
++    .stem_translating_only={on, 8, 16, 9, 16, end}
++},
++{   .name="essential pragmatapro",
++    .always_use_100={on, 0, maxp, end},
++    .m={on, 13, 0, 14, 0, end}
++},
++{   .name="freemono",
++    .always_use_100={on, 0, maxp, end}
++},
++{   .name="freesans",
++    .always_use_100={on, 0, maxp, end},
++    .edge_detection={on, 11, 11, 13, 13, end},
++    .spacing={on, 10, 12, 18, 18, 30, end},
++    .start={on, 10, 18, 18, 25, 30, end},
++    .stem_scaling={on, 16, 0, end},
++    .stem_translating={on, 11, 32, end},
++    .stem_translating_only={on, 10, 16, 9, 8, end}
++},
++{   .name="freeserif",
++    .stem_scaling={on, 13, 1, 17, 1, end}
++},
++{   .name="futura",
++    .stem_widths={on, 10, 14, sw2pv, maxp,}
++},
++{   .name="garamond",
++    .brightness={on, 0, -20, end},
++    .contrast={on, 0, 25, end}
++},
++{   .name="georgia",
++    .stem_translating_only={on, 13, 16, 14, 16, 15, 0, end}
++},
++{   .name="gill sans",
++    .stem_widths={on, 10, 17, sw2pv, maxp,}
++},
++{   .name="helvetica cy",
++    .stem_widths={on, 10, 23, maxp,}
++},
++{   .name="inconsolata",
++    .stem_scaling={on, 12, 1, 15, 1, end},
++    .stem_translating_only={on, 10, 24, 9, 32, end},
++    .stem_widths={on, 10, 23, maxp,},
++},
++{   .name="liberation mono",
++    .always_use_100={on, 0, maxp, end}
++},
++{   .name="liberation sans narrow",
++    .stem_widths={on,10, 22, maxp,}
++},
++{   .name="liberation sans",
++    .edge_detection={on, 11, 11, end},
++    .stem_translating={on, 11, 32, end},
++    .stem_translating_only={on, 10, 8, 8, 32, 9, 32, end},
++    .stem_widths={on,10, 19, maxp,}
++},
++{   .name="lucida console",
++    .always_use_100={on, 0, maxp, end}
++},
++{   .name="lucida grande",
++    .stem_scaling={on, 13, 1, end},
++    .stem_translating_only={on, 13, 24, 14, 24, 8, 16, 9, 16, end},
++    .stem_widths={on, 10, 16, sw2pv, maxp},
++},
++{   .name="lucida sans unicode",
++    .stem_translating_only={on, 13, 24, 14, 24, 8, 16, 9, 16, end},
++    .stem_widths={on,10, 16, sw2pv, maxp,}
++},
++{   .name="luxi sans",
++    .always_use_100={on, 13, 13, end},
++    .stem_widths={on, 10, 17, sw2pv, maxp,}
++},
++{   .name="microsoft sans serif",
++    .always_use_100={on, 0, maxp, end},
++    .stem_translating_only={on, 10, 16, 8, 32, 9, 32, end}
++},
++{   .name="monaco",
++    .always_use_100={on, 0, maxp, end}
++},
++{   .name="myriad pro",
++    .stem_scaling={on, 14, 1, 17, 1, end},
++    .stem_translating_only={on, 10, 16, 11, 0, 9, 16, end}
++},
++{   .name="nina",
++    .stem_scaling={on, 11, 0, 12, 0, 13, 0, end}
++},
++{   .name="open sans",
++    .stem_translating_only={on, 10, 16, 9, 16, end},
++    .stem_widths={on, 10, 20, maxp,}
++},
++{   .name="optima",
++    .brightness={on, 0, -20, end},
++    .contrast={on, 0, 25, end},
++    .stem_scaling={on, 17, 1, end},
++    .stem_translating_only={on, 10, 0, 11, 0, 12, 0, end}
++},
++{   .name="palatino linotype",
++    .edge_detection={on, 0, 100, end}
++},
++{   .name="pragmata",
++    .always_use_100={on, 0, maxp, end}
++},
++{   .name="raleway",
++    .stem_scaling={on, 15, 0, end}
++},
++{   .name="rokkitt",
++    .stem_widths={on, 10, 21, maxp,}
++},
++{   .name="samba",
++    .stem_scaling={on, 11, 0, end}
++},
++{   .name="segoe ui",
++    .always_use_100={on, 11, 12, 14, 14, end},
++    .stem_translating_only={on, 10, 0, 7, 32, 8, 16, 9, 24, end},
++    .stem_widths={on, 10, 23, maxp,}
++},
++{   .name="tahoma",
++    .always_use_100={on, 11, 11, 14, maxp, end},
++    .edge_detection={on, 11, 11, end},
++    .spacing={on, 10, 12, 18, 18, 30, end},
++    .start={on, 14, 17, 30, 100, 100, end},
++    .stem_translating={on, 11, 32, end},
++    .stem_translating_only={on, 7, 32, 8, 32, 9, 32, end},
++},
++{   .name="times new roman",
++    .always_use_100={on, 14, 14, 16, 16, end},
++    .bearing_correction={0, 100, end},
++    .stem_scaling={on, 17, 1, end},
++    .stem_translating_only={on, 17, 8, end}
++},
++{   .name="trebuchet ms",
++    .always_use_100={on, 13, 13, end},
++    .stem_scaling={on, 13, 0, 17, 0, 20, 1, end},
++    .stem_translating_only={on, 10, 16, 11, 0, 8, 32, 9, 32, end},
++    .stem_widths={on, 10, 17, sw2pv, maxp,}
++},
++{   .name="ubuntu",
++    .always_use_100={on, 12, 13, 15, 15, end}
++},
++{   .name="verdana",
++    .always_use_100={on, 0, 14, 16, maxp, end},
++    .stem_scaling={on, 12, 1, 15, 1, end},
++    .stem_translating_only={on, 8, 16, 15, 16, 14, 32, 18, 32, 19, 24, end}
++},
++%%
++
++static const sa_rules_t*
++ftinf_rules( const char *name ){
++    if( name ){
++        enum {
++            max_wlen=31
++        };
++        char buf[max_wlen+1];
++        int len=strlen( name );
++        if( len <= max_wlen ){
++            int i;
++            for( i=0; i<len; ++i )
++                buf[i]=tolower( name[i] );
++            buf[len]='\0';
++            return _rules_get( buf, len );
++        }
++    }
++    return NULL;
++}
++/*
++   gperf --output-file=ftinf_rh.c ftinf_rh.gperf
++*/
+-- 
+2.17.1
+

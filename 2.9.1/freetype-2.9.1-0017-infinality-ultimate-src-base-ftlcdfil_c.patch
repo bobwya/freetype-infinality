@@ -1,0 +1,68 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: igrekster <igrek+github@fastem.com>
+Date: Thu, 21 Jun 2018 00:13:06 +1000
+Subject: [PATCH 17/24] Infinality 2.9.1 (src/base/ftlcdfil.c)
+
+---
+ src/base/ftlcdfil.c                |   35 +-
+ 1 file changed, 32 insertions(+), 3 deletions(-)
+
+diff --git a/src/base/ftlcdfil.c b/src/base/ftlcdfil.c
+index 8d314df08..5b86d2aca 100644
+--- a/src/base/ftlcdfil.c
++++ b/src/base/ftlcdfil.c
+@@ -22,7 +22,10 @@
+ #include FT_LCD_FILTER_H
+ #include FT_IMAGE_H
+ #include FT_INTERNAL_OBJECTS_H
+-
++#include <math.h>
++#include <string.h>
++#include <strings.h>
++#include "ftinf.h"
+ 
+ #ifdef FT_CONFIG_OPTION_SUBPIXEL_RENDERING
+ 
+@@ -296,11 +299,37 @@
+   FT_Library_SetLcdFilter( FT_Library    library,
+                            FT_LcdFilter  filter )
+   {
+-    static const FT_LcdFiveTapFilter  default_weights =
+-                   { 0x08, 0x4d, 0x56, 0x4d, 0x08 };
+     static const FT_LcdFiveTapFilter  light_weights =
+                    { 0x00, 0x55, 0x56, 0x55, 0x00 };
+ 
++#ifndef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    static const FT_LcdFiveTapFilter  default_weights =
++                   { 0x08, 0x4d, 0x56, 0x4d, 0x08 };
++#else
++    FT_LcdFiveTapFilter default_weights;
++    if( ftinf && ftinf->filter_params[0] )
++    {
++        const int *f=ftinf->filter_params;
++        /* Assume we were given integers [0-100] get them to [0-255] */
++        int val; /* 2611=2.55*1024 */
++        val=(f[1]*2611+512)>>10; if( val > 255 ) val=255;
++        default_weights[0] = (FT_Byte) val;
++        val=(f[2]*2611+512)>>10; if( val > 255 ) val=255;
++        default_weights[1] = (FT_Byte) val;
++        val=(f[3]*2611+512)>>10; if( val > 255 ) val=255;
++        default_weights[2] = (FT_Byte) val;
++        val=(f[4]*2611+512)>>10; if( val > 255 ) val=255;
++        default_weights[3] = (FT_Byte) val;
++        val=(f[5]*2611+512)>>10; if( val > 255 ) val=255;
++        default_weights[4] = (FT_Byte) val;
++    } else {
++        default_weights[0]=0x08;
++        default_weights[1]=0x4d;
++        default_weights[2]=0x56;
++        default_weights[3]=0x4d;
++        default_weights[4]=0x08;
++    }
++#endif
+ 
+     if ( !library )
+       return FT_THROW( Invalid_Library_Handle );
+-- 
+2.17.1
+

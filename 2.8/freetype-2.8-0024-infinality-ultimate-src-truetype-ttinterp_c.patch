@@ -1,0 +1,24 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 24/24] Infinality 2.8 (src/truetype/ttinterp.c)
+
+---
+ src/truetype/ttinterp.c            |    1 +
+ 1 file changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/src/truetype/ttinterp.c b/src/truetype/ttinterp.c
+index af31408..6380d83 100644
+--- a/src/truetype/ttinterp.c
++++ b/src/truetype/ttinterp.c
+@@ -5753,6 +5753,7 @@
+ 
+       if ( exc->ignore_x_mode                                 &&
+            exc->GS.freeVector.x != 0                          &&
++           exc->GS.freeVector.y == 0                          &&
+            !( exc->sph_tweak_flags & SPH_TWEAK_NORMAL_ROUND ) )
+         control_value_cutin = 0;
+     }
+-- 
+2.13.0
+

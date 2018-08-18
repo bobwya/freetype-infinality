@@ -1,0 +1,134 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 18/24] Infinality 2.8 (src/base/ftobjs.c)
+
+---
+ src/base/ftobjs.c                  |   67 +-
+ 1 file changed, 66 insertions(+), 1 deletions(-)
+
+diff --git a/src/base/ftobjs.c b/src/base/ftobjs.c
+index 539116e..c86b348 100644
+--- a/src/base/ftobjs.c
++++ b/src/base/ftobjs.c
+@@ -43,7 +43,9 @@
+ #ifdef FT_CONFIG_OPTION_MAC_FONTS
+ #include "ftbase.h"
+ #endif
+-
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++#include "ftinf.h"
++#endif
+ 
+ #ifdef FT_DEBUG_LEVEL_TRACE
+ 
+@@ -81,6 +83,11 @@
+ 
+ #define GRID_FIT_METRICS
+ 
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++#include <strings.h>
++#include <stdlib.h>
++#include "../autofit/aflatin.h"
++#endif
+ 
+   /* forward declaration */
+   static FT_Error
+@@ -567,6 +574,25 @@
+   ft_lookup_glyph_renderer( FT_GlyphSlot  slot );
+ 
+ 
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++  static void
++  ft_glyphslot_enlarge_metrics( FT_GlyphSlot slot,
++                                FT_Render_Mode mode )
++  {
++    FT_Glyph_Metrics*  metrics = &slot->metrics;
++    FT_Pos enlarge_cbox = 0;
++
++
++    /* enlarge for grayscale rendering */
++    if ( mode == FT_RENDER_MODE_NORMAL )
++      enlarge_cbox = 64;
++
++    metrics->horiBearingX -= enlarge_cbox;
++    metrics->width += 2 * enlarge_cbox;
++  }
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
++
++
+ #ifdef GRID_FIT_METRICS
+   static void
+   ft_glyphslot_grid_fit_metrics( FT_GlyphSlot  slot,
+@@ -625,8 +651,18 @@
+     FT_Bool       autohint = FALSE;
+     FT_Module     hinter;
+     TT_Face       ttface = (TT_Face)face;
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
+ 
++    FT_Bool use_various_tweaks = FALSE;
++    if( ftinf ) use_various_tweaks=ftinf->use_various_tweaks;
+ 
++    /* Force autohint if no tt instructions */
++    /* NOTE:  NEEDS TO BE RUN LATER IN CODE???? */
++    /*if ( use_various_tweaks                             &&
++         ttface->num_locations                          &&
++         ttface->max_profile.maxSizeOfInstructions == 0 )
++      load_flags |= FT_LOAD_FORCE_AUTOHINT;*/
++#endif
+     if ( !face || !face->size || !face->glyph )
+       return FT_THROW( Invalid_Face_Handle );
+ 
+@@ -717,6 +753,18 @@
+     {
+       FT_AutoHinter_Interface  hinting;
+ 
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++      if ( use_various_tweaks )
++      {
++        /* Force slight hinting over full hinting always */
++        load_flags &= ~FT_LOAD_TARGET_LCD;
++        load_flags &= ~FT_LOAD_TARGET_LCD_V;
++        load_flags &= ~FT_LOAD_TARGET_MONO;
++        load_flags &= ~FT_LOAD_TARGET_NORMAL;
++        load_flags |= FT_LOAD_TARGET_LIGHT;
++        /*printf("%d ", load_flags);*/
++      }
++#endif
+ 
+       /* try to load embedded bitmaps first if available            */
+       /*                                                            */
+@@ -762,6 +810,18 @@
+       if ( error )
+         goto Exit;
+ 
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++      infinality_cur_width = 0;
++
++      {
++        /* fix for sdl_ttf */
++        FT_Render_Mode  mode = FT_LOAD_TARGET_MODE( load_flags );
++
++        if ( slot->format == FT_GLYPH_FORMAT_OUTLINE )
++          ft_glyphslot_enlarge_metrics( slot, mode );
++      }
++#endif
++
+       if ( slot->format == FT_GLYPH_FORMAT_OUTLINE )
+       {
+         /* check that the loaded outline is correct */
+@@ -4986,6 +5046,11 @@
+     /* That's ok now */
+     *alibrary = library;
+ 
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    /* get Infinality settings */
++    ftinf_env();
++#endif
++
+     return FT_Err_Ok;
+ 
+ #ifdef FT_CONFIG_OPTION_PIC
+-- 
+2.13.0
+

@@ -1,0 +1,41 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 19/24] Infinality 2.8 (src/base/ftoutln.c)
+
+---
+ src/base/ftoutln.c                 |   10 +-
+ 1 file changed, 9 insertions(+), 1 deletions(-)
+
+diff --git a/src/base/ftoutln.c b/src/base/ftoutln.c
+index 464a066..d84a82a 100644
+--- a/src/base/ftoutln.c
++++ b/src/base/ftoutln.c
+@@ -29,7 +29,9 @@
+ #include FT_INTERNAL_CALC_H
+ #include FT_INTERNAL_DEBUG_H
+ #include FT_TRIGONOMETRY_H
+-
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++#include "ftinf.h"
++#endif
+ 
+   /*************************************************************************/
+   /*                                                                       */
+@@ -913,7 +915,13 @@
+     FT_Vector*  points;
+     FT_Int      c, first, last;
+     FT_Int      orientation;
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    FT_Bool use_various_tweaks = FALSE;
++    if( ftinf ) use_various_tweaks=ftinf->use_various_tweaks;
+ 
++    if ( use_various_tweaks )
++      ystrength = FT_PIX_FLOOR ( ystrength );
++#endif
+ 
+     if ( !outline )
+       return FT_THROW( Invalid_Outline );
+-- 
+2.13.0
+

@@ -1,0 +1,54 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 04/24] Infinality 2.8 (include/freetype/config/ftoption.h)
+
+---
+ include/freetype/config/ftoption.h |   17 +-
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/include/freetype/config/ftoption.h b/include/freetype/config/ftoption.h
+index 1bf6e8f..c565b36 100644
+--- a/include/freetype/config/ftoption.h
++++ b/include/freetype/config/ftoption.h
+@@ -122,7 +122,7 @@ FT_BEGIN_HEADER
+   /* This is done to allow FreeType clients to run unmodified, forcing     */
+   /* them to display normal gray-level anti-aliased glyphs.                */
+   /*                                                                       */
+-/* #define FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
++#define FT_CONFIG_OPTION_SUBPIXEL_RENDERING
+ 
+ 
+   /*************************************************************************/
+@@ -626,6 +626,17 @@ FT_BEGIN_HEADER
+   /*                                                                       */
+ #define TT_CONFIG_OPTION_BYTECODE_INTERPRETER
+ 
++  /*************************************************************************/
++  /*                                                                       */
++  /* Define FT_CONFIG_OPTION_INFINALITY_PATCHSET if you want to enable     */
++  /* all additional infinality patches, which are configured via env       */
++  /* variables.                                                            */
++  /*                                                                       */
++  /*   This option requires TT_CONFIG_OPTION_SUBPIXEL_HINTING to           */
++  /*   defined.                                                            */
++  /*                                                                       */
++#define FT_CONFIG_OPTION_INFINALITY_PATCHSET
++
+ 
+   /*************************************************************************/
+   /*                                                                       */
+@@ -684,8 +695,8 @@ FT_BEGIN_HEADER
+   /* [1] http://www.microsoft.com/typography/cleartype/truetypecleartype.aspx */
+   /*                                                                       */
+ /* #define TT_CONFIG_OPTION_SUBPIXEL_HINTING  1         */
+-#define TT_CONFIG_OPTION_SUBPIXEL_HINTING  2
+-/* #define TT_CONFIG_OPTION_SUBPIXEL_HINTING  ( 1 | 2 ) */
++/* #define TT_CONFIG_OPTION_SUBPIXEL_HINTING  1 */
++#define TT_CONFIG_OPTION_SUBPIXEL_HINTING  ( 1 | 2 )
+ 
+ 
+   /*************************************************************************/
+-- 
+2.13.0
+

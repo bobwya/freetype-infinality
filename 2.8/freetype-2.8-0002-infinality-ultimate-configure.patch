@@ -1,0 +1,25 @@
+From 48c2930e9b83c47457ca03f5f8e6f1b61540a8e6 Mon Sep 17 00:00:00 2001
+From: "Devin J. Pohly" <djpohly@gmail.com>
+Date: Wed, 24 May 2017 15:08:52 -0500
+Subject: [PATCH 02/24] Infinality 2.8 (configure)
+
+---
+ configure                          |    2 +
+ 1 file changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/configure b/configure
+index 68dbd99..165703c 100755
+--- a/configure
++++ b/configure
+@@ -13,6 +13,8 @@
+ # Call the `configure' script located in `builds/unix'.
+ #
+ 
++export LDFLAGS="$LDFLAGS -lm"
++
+ rm -f config.mk builds/unix/unix-def.mk builds/unix/unix-cc.mk
+ 
+ # respect GNUMAKE environment variable for backward compatibility
+-- 
+2.13.0
+
