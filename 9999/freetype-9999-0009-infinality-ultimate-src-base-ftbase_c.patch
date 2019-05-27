@@ -1,0 +1,26 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: Robert Walker <bob.mt.wya@gmail.com>
+Date: Wed, 29 May 2019 00:13:06 +1000
+Subject: [PATCH 09/24] Infinality 2.10.0 (src/base/ftbase.c)
+
+---
+ src/base/ftbase.c                  |    3 +
+ 1 file changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/src/base/ftbase.c b/src/base/ftbase.c
+index f914b9b24..a3c2afd5d 100644
+--- a/src/base/ftbase.c
++++ b/src/base/ftbase.c
+@@ -37,6 +37,9 @@
+ #include "ftstream.c"
+ #include "fttrigon.c"
+ #include "ftutil.c"
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++#include "ftinf.c"
++#endif
+ 
+ 
+ /* END */
+-- 
+2.17.1
+

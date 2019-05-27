@@ -1,0 +1,43 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: Robert Walker <bob.mt.wya@gmail.com>
+Date: Wed, 29 May 2019 00:13:06 +1000
+Subject: [PATCH 04/24] Infinality 2.10.0 (include/freetype/config/ftoption.h)
+
+---
+ include/freetype/config/ftoption.h |   17 +-
+ 1 file changed, 12 insertions(+), 1 deletions(-)
+
+diff --git a/include/freetype/config/ftoption.h b/include/freetype/config/ftoption.h
+index 4bcab2af5..261846366 100644
+--- a/include/freetype/config/ftoption.h
++++ b/include/freetype/config/ftoption.h
+@@ -122,7 +122,7 @@ FT_BEGIN_HEADER
+    * macro is not defined, FreeType offers alternative LCD rendering
+    * technology that produces excellent output without LCD filtering.
+    */
+-/* #define FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
++#define FT_CONFIG_OPTION_SUBPIXEL_RENDERING
+ 
+ 
+   /**************************************************************************
+@@ -600,6 +600,17 @@ FT_BEGIN_HEADER
+    */
+ #define TT_CONFIG_OPTION_BYTECODE_INTERPRETER
+ 
++  /**************************************************************************
++   *
++   * Define FT_CONFIG_OPTION_INFINALITY_PATCHSET if you want to enable
++   * all additional infinality patches, which are configured via env
++   * variables.
++   *
++   *   This option requires TT_CONFIG_OPTION_SUBPIXEL_HINTING to
++   *   defined.
++   */
++#define FT_CONFIG_OPTION_INFINALITY_PATCHSET
++
+
+   /**************************************************************************
+    *
+-- 
+2.17.1
+

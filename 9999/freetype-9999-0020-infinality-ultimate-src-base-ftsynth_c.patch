@@ -1,0 +1,67 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: Robert Walker <bob.mt.wya@gmail.com>
+Date: Wed, 29 May 2019 00:13:06 +1000
+Subject: [PATCH 20/24] Infinality 2.10.0 (src/base/ftsynth.c)
+
+---
+ src/base/ftsynth.c                 |   22 +-
+ 1 file changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/src/base/ftsynth.c b/src/base/ftsynth.c
+index c28346707..b3d40824b 100644
+--- a/src/base/ftsynth.c
++++ b/src/base/ftsynth.c
+@@ -22,7 +22,9 @@
+ #include FT_INTERNAL_OBJECTS_H
+ #include FT_OUTLINE_H
+ #include FT_BITMAP_H
+-
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++#include "ftinf.h"
++#endif
+ 
+   /**************************************************************************
+    *
+@@ -93,7 +95,10 @@
+     FT_Face     face;
+     FT_Error    error;
+     FT_Pos      xstr, ystr;
+-
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    FT_Bool use_various_tweaks = FALSE;
++    if( ftinf ) use_various_tweaks=ftinf->use_various_tweaks;
++#endif
+ 
+     if ( !slot )
+       return;
+@@ -111,8 +116,16 @@
+     ystr = xstr;
+ 
+     if ( slot->format == FT_GLYPH_FORMAT_OUTLINE )
++    {
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++      if ( use_various_tweaks )
++        (void)FT_Outline_EmboldenXY( &slot->outline,
++                                     xstr,
++                                     FT_PIX_FLOOR( ystr ) );
++      else
++#endif
+       FT_Outline_EmboldenXY( &slot->outline, xstr, ystr );
+-
++    }
+     else /* slot->format == FT_GLYPH_FORMAT_BITMAP */
+     {
+       /* round to full pixels */
+@@ -150,6 +163,9 @@
+ 
+     slot->metrics.width        += xstr;
+     slot->metrics.height       += ystr;
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    if ( !use_various_tweaks )
++#endif
+     slot->metrics.horiAdvance  += xstr;
+     slot->metrics.vertAdvance  += ystr;
+     slot->metrics.horiBearingY += ystr;
+-- 
+2.17.1
+
