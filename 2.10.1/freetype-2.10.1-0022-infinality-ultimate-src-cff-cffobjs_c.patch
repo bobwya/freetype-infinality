@@ -1,0 +1,36 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: Robert Walker <bob.mt.wya@gmail.com>
+Date: Wed, 29 May 2019 00:13:06 +1000
+Subject: [PATCH 22/24] Infinality 2.10.0 (src/cff/cffobjs.c)
+
+---
+ src/cff/cffobjs.c                  |    6 +
+ 1 file changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/src/cff/cffobjs.c b/src/cff/cffobjs.c
+index a2d7aec65..aa5bb0a00 100644
+--- a/src/cff/cffobjs.c
++++ b/src/cff/cffobjs.c
+@@ -43,6 +43,9 @@
+ #include FT_INTERNAL_POSTSCRIPT_AUX_H
+ #include FT_SERVICE_CFF_TABLE_LOAD_H
+ 
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++#include "../base/ftinf.h"
++#endif
+ 
+   /**************************************************************************
+    *
+@@ -1170,6 +1173,9 @@
+ #endif
+ 
+     driver->no_stem_darkening = TRUE;
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    if(ftinf) driver->no_stem_darkening = !ftinf->stem_darkening_cff;
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+ 
+     driver->darken_params[0] = CFF_CONFIG_OPTION_DARKENING_PARAMETER_X1;
+     driver->darken_params[1] = CFF_CONFIG_OPTION_DARKENING_PARAMETER_Y1;
+-- 
+2.17.1
+

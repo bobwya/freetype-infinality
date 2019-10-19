@@ -1,0 +1,24 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: Robert Walker <bob.mt.wya@gmail.com>
+Date: Wed, 29 May 2019 00:13:06 +1000
+Subject: [PATCH 01/24] Infinality 2.10.0 (builds/freetype.mk)
+
+---
+ builds/freetype.mk                 |    1 +
+ 1 file changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/builds/freetype.mk b/builds/freetype.mk
+index 6f68a0f65..74f550b53 100644
+--- a/builds/freetype.mk
++++ b/builds/freetype.mk
+@@ -164,6 +164,7 @@ FT_CFLAGS  = $(CPPFLAGS) \
+              $(CFLAGS) \
+              $DFT2_BUILD_LIBRARY \
+              $DFT_CONFIG_MODULES_H="<ftmodule.h>" \
++			 $D_GNU_SOURCE \
+              $(FTOPTION_FLAG)
+ 
+ 
+-- 
+2.17.1
+

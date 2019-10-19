@@ -1,0 +1,24 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: Robert Walker <bob.mt.wya@gmail.com>
+Date: Wed, 29 May 2019 00:13:06 +1000
+Subject: [PATCH 21/24] Infinality 2.10.0 (src/base/rules.mk)
+
+---
+ src/base/rules.mk                  |    1 +
+ 1 file changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/src/base/rules.mk b/src/base/rules.mk
+index e9805bd06..815daba0d 100644
+--- a/src/base/rules.mk
++++ b/src/base/rules.mk
+@@ -45,6 +45,7 @@ BASE_SRC := $(BASE_DIR)/basepic.c  \
+             $(BASE_DIR)/ftgloadr.c \
+             $(BASE_DIR)/fthash.c   \
+             $(BASE_DIR)/ftlcdfil.c \
++            $(BASE_DIR)/ftinf.c    \
+             $(BASE_DIR)/ftobjs.c   \
+             $(BASE_DIR)/ftoutln.c  \
+             $(BASE_DIR)/ftpsprop.c \
+-- 
+2.17.1
+
