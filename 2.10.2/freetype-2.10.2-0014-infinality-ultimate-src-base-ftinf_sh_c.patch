@@ -1,0 +1,482 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: Robert Walker <bob.mt.wya@gmail.com>
+Date: Wed, 29 May 2019 00:13:06 +1000
+Subject: [PATCH 14/24] Infinality 2.10.0 (src/base/ftinf_sh.c)
+
+---
+ src/base/ftinf_sh.c                |  463 +++++
+ 1 file changed, 463 insertions(+), 0 deletions(-)
+ create mode 100644 src/base/ftinf_sh.c
+
+diff --git a/src/base/ftinf_sh.c b/src/base/ftinf_sh.c
+new file mode 100644
+index 000000000..87d2ff8bd
+--- /dev/null
++++ b/src/base/ftinf_sh.c
+@@ -0,0 +1,463 @@
++/* ANSI-C code produced by gperf version 3.1 */
++/* Command-line: gperf --output-file=ftinf_sh.c ftinf_sh.gperf  */
++/* Computed positions: -k'1,$' */
++
++#if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
++      && ('%' == 37) && ('&' == 38) && ('\'' == 39) && ('(' == 40) \
++      && (')' == 41) && ('*' == 42) && ('+' == 43) && (',' == 44) \
++      && ('-' == 45) && ('.' == 46) && ('/' == 47) && ('0' == 48) \
++      && ('1' == 49) && ('2' == 50) && ('3' == 51) && ('4' == 52) \
++      && ('5' == 53) && ('6' == 54) && ('7' == 55) && ('8' == 56) \
++      && ('9' == 57) && (':' == 58) && (';' == 59) && ('<' == 60) \
++      && ('=' == 61) && ('>' == 62) && ('?' == 63) && ('A' == 65) \
++      && ('B' == 66) && ('C' == 67) && ('D' == 68) && ('E' == 69) \
++      && ('F' == 70) && ('G' == 71) && ('H' == 72) && ('I' == 73) \
++      && ('J' == 74) && ('K' == 75) && ('L' == 76) && ('M' == 77) \
++      && ('N' == 78) && ('O' == 79) && ('P' == 80) && ('Q' == 81) \
++      && ('R' == 82) && ('S' == 83) && ('T' == 84) && ('U' == 85) \
++      && ('V' == 86) && ('W' == 87) && ('X' == 88) && ('Y' == 89) \
++      && ('Z' == 90) && ('[' == 91) && ('\\' == 92) && (']' == 93) \
++      && ('^' == 94) && ('_' == 95) && ('a' == 97) && ('b' == 98) \
++      && ('c' == 99) && ('d' == 100) && ('e' == 101) && ('f' == 102) \
++      && ('g' == 103) && ('h' == 104) && ('i' == 105) && ('j' == 106) \
++      && ('k' == 107) && ('l' == 108) && ('m' == 109) && ('n' == 110) \
++      && ('o' == 111) && ('p' == 112) && ('q' == 113) && ('r' == 114) \
++      && ('s' == 115) && ('t' == 116) && ('u' == 117) && ('v' == 118) \
++      && ('w' == 119) && ('x' == 120) && ('y' == 121) && ('z' == 122) \
++      && ('{' == 123) && ('|' == 124) && ('}' == 125) && ('~' == 126))
++/* The character set is not based on ISO-646.  */
++#error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gnu-gperf@gnu.org>."
++#endif
++
++#line 9 "ftinf_sh.gperf"
++
++#include <ctype.h>
++static const struct ftinf_s* _settings_get( const char*str, unsigned len);
++/* maximum key range = 37, duplicates = 0 */
++
++#ifdef __GNUC__
++__inline
++#else
++#ifdef __cplusplus
++inline
++#endif
++#endif
++static unsigned int
++_settings_hash (register const char *str, register unsigned int len)
++{
++  static const unsigned char asso_values[] =
++    {
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 13,
++       8, 30, 25, 20, 40, 10, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40,  5, 40,  0,
++       0,  0, 40, 40, 10,  0, 40, 40, 15,  5,
++      10,  0, 10, 40, 40,  0,  0,  0,  0,  0,
++       0,  0, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
++      40, 40, 40, 40, 40, 40
++    };
++  return len + asso_values[(unsigned char)str[len - 1]] + asso_values[(unsigned char)str[0]];
++}
++
++#ifdef __GNUC__
++__inline
++#if defined __GNUC_STDC_INLINE__ || defined __GNUC_GNU_INLINE__
++__attribute__ ((__gnu_inline__))
++#endif
++#endif
++const struct ftinf_s *
++_settings_get (register const char *str, register unsigned int len)
++{
++  enum
++    {
++      TOTAL_KEYWORDS = 22,
++      MIN_WORD_LENGTH = 3,
++      MAX_WORD_LENGTH = 14,
++      MIN_HASH_VALUE = 3,
++      MAX_HASH_VALUE = 39
++    };
++
++  static const struct ftinf_s wordlist[] =
++    {
++#line 76 "ftinf_sh.gperf"
++{   .name="osx",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_vertical_stem_darken_strength=25,
++    .bold_embolden_x_value=16,
++    .brightness=10,
++    .contrast=20,
++    .filter_params={on, 3, 32, 38, 32, 3},
++    .gamma_correction={1000, 80},
++    .global_embolden_y_value=8,
++    .grayscale_filter_strength=25,
++},
++#line 37 "ftinf_sh.gperf"
++{   .name="ipad",
++    .filter_params={on, 0, 0, 100, 0, 0},
++    .gamma_correction={1000, 80},
++    .grayscale_filter_strength=100
++},
++#line 114 "ftinf_sh.gperf"
++{   .name="shove",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=100,
++    .stem_fitting_strength=100,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true
++},
++#line 126 "ftinf_sh.gperf"
++{   .name="ubuntu",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_vertical_stem_darken_strength=25,
++    .brightness=-10,
++    .contrast=15,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={1000, 80},
++    .use_various_tweaks=true
++},
++#line 27 "ftinf_sh.gperf"
++{   .name="classic",
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .filter_params={on, 6, 25, 38, 25, 6},
++    .gamma_correction={0, 100},
++    .use_various_tweaks=true
++},
++#line 34 "ftinf_sh.gperf"
++{   .name="disabled",
++    .gamma_correction={0, 100},
++},
++#line 100 "ftinf_sh.gperf"
++{   .name="sharpened",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=25,
++    .stem_fitting_strength=25,
++    .stem_snapping_sliding_scale=40,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=65
++},
++#line 42 "ftinf_sh.gperf"
++{   .name="infinality",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=25,
++    .stem_fitting_strength=25,
++    .stem_snapping_sliding_scale=40,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=5
++},
++#line 15 "ftinf_sh.gperf"
++{   .name="custom",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 8, 24, 48, 24, 8},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=75,
++    .stem_fitting_strength=50,
++    .stem_snapping_sliding_scale=30,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true
++},
++#line 180 "ftinf_sh.gperf"
++{   .name="vanilla",
++    .filter_params={on, 6, 25, 38, 25, 6},
++    .gamma_correction={0, 100},
++},
++#line 184 "ftinf_sh.gperf"
++{   .name="windows7light",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .contrast=20,
++    .filter_params={on, 20, 25, 38, 25, 05},
++    .fringe_filter_strength=100,
++    .gamma_correction={1000, 160},
++    .stem_snapping_sliding_scale=30,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=100
++},
++#line 226 "ftinf_sh.gperf"
++{   .name="windowsxplight",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .brightness=20,
++    .contrast=30,
++    .filter_params={on, 6, 25, 44, 25, 6},
++    .fringe_filter_strength=100,
++    .gamma_correction={1000, 120},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .stem_snapping_sliding_scale=30,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=65
++},
++#line 64 "ftinf_sh.gperf"
++{   .name="nudge",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=25,
++    .stem_fitting_strength=15,
++    .stem_snapping_sliding_scale=30,
++    .use_various_tweaks=true,
++},
++#line 144 "ftinf_sh.gperf"
++{   .name="ultimate2",
++    .filter_params={on, 6, 22, 36, 22, 6},
++    .fringe_filter_strength=25,
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=25
++},
++#line 197 "ftinf_sh.gperf"
++{   .name="windows7",
++    .filter_params={on, 20, 25, 42, 25, 06},
++    .fringe_filter_strength=100,
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_vertical_stem_darken_strength=25,
++    .windows_style_sharpening_strength=65,
++    .gamma_correction={1000, 120},
++    .brightness=10,
++    .contrast=20,
++    .use_various_tweaks=true,
++    .autohint_snap_stem_height=100,
++    .use_known_settings_on_selected_fonts=true,
++},
++#line 210 "ftinf_sh.gperf"
++{   .name="windowsxp",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .brightness=10,
++    .contrast=20,
++    .filter_params={on, 6, 25, 44, 25, 6},
++    .fringe_filter_strength=100,
++    .gamma_correction={1000, 120},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .stem_snapping_sliding_scale=30,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=65
++},
++#line 56 "ftinf_sh.gperf"
++{   .name="linux",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 6, 25, 44, 25, 6},
++    .gamma_correction={0, 100},
++    .use_various_tweaks=true
++},
++#line 135 "ftinf_sh.gperf"
++{   .name="ultimate1",
++    .filter_params={on, 4, 22, 38, 22, 4},
++    .fringe_filter_strength=25,
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=25
++},
++#line 87 "ftinf_sh.gperf"
++{   .name="push",
++    .autohint_horizontal_stem_darken_strength=10,
++    .autohint_increase_glyph_heights=true,
++    .autohint_snap_stem_height=100,
++    .autohint_vertical_stem_darken_strength=25,
++    .filter_params={on, 11, 22, 38, 22, 11},
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=75,
++    .stem_fitting_strength=50,
++    .stem_snapping_sliding_scale=30,
++    .use_known_settings_on_selected_fonts=true,
++    .use_various_tweaks=true
++},
++#line 171 "ftinf_sh.gperf"
++{   .name="ultimate5",
++    .filter_params={on, 12, 28, 42, 28, 12},
++    .fringe_filter_strength=25,
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=25
++},
++#line 162 "ftinf_sh.gperf"
++{   .name="ultimate4",
++    .filter_params={on, 10, 25, 37, 25, 10},
++    .fringe_filter_strength=25,
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=25
++},
++#line 153 "ftinf_sh.gperf"
++{   .name="ultimate3",
++    .filter_params={on, 8, 24, 36, 24, 8},
++    .fringe_filter_strength=25,
++    .gamma_correction={0, 100},
++    .stem_alignment_strength=15,
++    .stem_fitting_strength=15,
++    .use_various_tweaks=true,
++    .windows_style_sharpening_strength=25
++}
++    };
++
++  if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
++    {
++      register int key = _settings_hash (str, len);
++
++      if (key <= MAX_HASH_VALUE && key >= MIN_HASH_VALUE)
++        {
++          register const struct ftinf_s *resword;
++
++          switch (key - 3)
++            {
++              case 0:
++                resword = &wordlist[0];
++                goto compare;
++              case 1:
++                resword = &wordlist[1];
++                goto compare;
++              case 2:
++                resword = &wordlist[2];
++                goto compare;
++              case 3:
++                resword = &wordlist[3];
++                goto compare;
++              case 4:
++                resword = &wordlist[4];
++                goto compare;
++              case 5:
++                resword = &wordlist[5];
++                goto compare;
++              case 6:
++                resword = &wordlist[6];
++                goto compare;
++              case 7:
++                resword = &wordlist[7];
++                goto compare;
++              case 8:
++                resword = &wordlist[8];
++                goto compare;
++              case 9:
++                resword = &wordlist[9];
++                goto compare;
++              case 10:
++                resword = &wordlist[10];
++                goto compare;
++              case 11:
++                resword = &wordlist[11];
++                goto compare;
++              case 12:
++                resword = &wordlist[12];
++                goto compare;
++              case 14:
++                resword = &wordlist[13];
++                goto compare;
++              case 15:
++                resword = &wordlist[14];
++                goto compare;
++              case 16:
++                resword = &wordlist[15];
++                goto compare;
++              case 17:
++                resword = &wordlist[16];
++                goto compare;
++              case 19:
++                resword = &wordlist[17];
++                goto compare;
++              case 21:
++                resword = &wordlist[18];
++                goto compare;
++              case 26:
++                resword = &wordlist[19];
++                goto compare;
++              case 31:
++                resword = &wordlist[20];
++                goto compare;
++              case 36:
++                resword = &wordlist[21];
++                goto compare;
++            }
++          return 0;
++        compare:
++          {
++            register const char *s = resword->name;
++
++            if (*str == *s && !strcmp (str + 1, s + 1))
++              return resword;
++          }
++        }
++    }
++  return 0;
++}
++#line 242 "ftinf_sh.gperf"
++
++
++static const ftinf_t*
++ftinf_settings( const char *name ){
++    if( name ){
++        enum {
++            max_wlen=31
++        };
++        char buf[max_wlen+1];
++        int len=strlen( name );
++        if( len <= max_wlen ){
++            int i;
++            for( i=0; i<len; ++i )
++                buf[i]=tolower( name[i] );
++            buf[len]='\0';
++            return _settings_get( buf, len );
++        }
++    }
++    return NULL;
++}
++/*
++   gperf --output-file=ftinf_sh.c ftinf_sh.gperf
++*/
+-- 
+2.17.1
+

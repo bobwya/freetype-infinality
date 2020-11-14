@@ -12,9 +12,9 @@ index 8d314df08..5b86d2aca 100644
 --- a/src/base/ftlcdfil.c
 +++ b/src/base/ftlcdfil.c
 @@ -22,7 +22,10 @@
- #include <freetype/ftlcdfil.h>
- #include <freetype/ftimage.h>
- #include <freetype/internal/ftobjs.h>
+ #include FT_LCD_FILTER_H
+ #include FT_IMAGE_H
+ #include FT_INTERNAL_OBJECTS_H
 -
 +#include <math.h>
 +#include <string.h>

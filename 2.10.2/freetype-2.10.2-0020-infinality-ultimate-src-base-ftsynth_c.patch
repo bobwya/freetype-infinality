@@ -12,9 +12,9 @@ index c28346707..b3d40824b 100644
 --- a/src/base/ftsynth.c
 +++ b/src/base/ftsynth.c
 @@ -22,7 +22,9 @@
- #include <freetype/internal/ftobjs.h>
- #include <freetype/ftoutln.h>
- #include <freetype/ftbitmap.h>
+ #include FT_INTERNAL_OBJECTS_H
+ #include FT_OUTLINE_H
+ #include FT_BITMAP_H
 -
 +#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
 +#include "ftinf.h"

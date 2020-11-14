@@ -1,0 +1,12 @@
+--- a/builds/freetype.mk	2020-05-04 05:07:22.000000000 +0100
++++ b/builds/freetype.mk	2020-11-14 17:24:48.471190921 +0000
+@@ -152,7 +152,8 @@
+ #
+ FT_CFLAGS  = $(CPPFLAGS) \
+              $(CFLAGS) \
+-             $DFT2_BUILD_LIBRARY
++             $DFT2_BUILD_LIBRARY \
++             $D_GNU_SOURCE
+ 
+ FT_COMPILE := $(CC) $(ANSIFLAGS) $(INCLUDE_FLAGS) $(FT_CFLAGS)
+ 

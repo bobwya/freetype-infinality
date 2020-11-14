@@ -1,0 +1,43 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: Robert Walker <bob.mt.wya@gmail.com>
+Date: Wed, 29 May 2019 00:13:06 +1000
+Subject: [PATCH 16/24] Infinality 2.10.0 (src/base/ftinit.c)
+
+---
+ src/base/ftinit.c                  |   14 +-
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/src/base/ftinit.c b/src/base/ftinit.c
+index 0acc75e..45e3efa 100644
+--- a/src/base/ftinit.c
++++ b/src/base/ftinit.c
+@@ -39,6 +39,9 @@
+ 
+ #include <ft2build.h>
+ #include FT_CONFIG_CONFIG_H
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++#include "ftinf.h"
++#endif
+ #include <freetype/internal/ftobjs.h>
+ #include <freetype/internal/ftdebug.h>
+ #include <freetype/ftmodapi.h>
+@@ -220,10 +223,14 @@
+     error = FT_New_Library( memory, alibrary );
+     if ( error )
+       FT_Done_Memory( memory );
+-    else
++    else {
+       FT_Add_Default_Modules( *alibrary );
+-
+-    FT_Set_Default_Properties( *alibrary );
++      FT_Set_Default_Properties( *alibrary );
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++      /* get Infinality settings */
++      ftinf_env();
++#endif
++    }
+ 
+     return error;
+   }
+-- 
+2.17.1

@@ -12,9 +12,9 @@ index cb91321de..d5d12d682 100644
 --- a/src/base/ftoutln.c
 +++ b/src/base/ftoutln.c
 @@ -22,7 +22,9 @@
- #include <freetype/internal/ftcalc.h>
- #include <freetype/internal/ftdebug.h>
- #include <freetype/fttrigon.h>
+ #include FT_INTERNAL_CALC_H
+ #include FT_INTERNAL_DEBUG_H
+ #include FT_TRIGONOMETRY_H
 -
 +#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
 +#include "ftinf.h"

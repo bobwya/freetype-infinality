@@ -1,0 +1,24 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: Robert Walker <bob.mt.wya@gmail.com>
+Date: Wed, 29 May 2019 00:13:06 +1000
+Subject: [PATCH 24/24] Infinality 2.10.0 (src/truetype/ttinterp.c)
+
+---
+ src/truetype/ttinterp.c            |    1 +
+ 1 file changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/src/truetype/ttinterp.c b/src/truetype/ttinterp.c
+index da9b595ab..32d31b15b 100644
+--- a/src/truetype/ttinterp.c
++++ b/src/truetype/ttinterp.c
+@@ -5794,6 +5794,7 @@
+ 
+       if ( exc->ignore_x_mode                                 &&
+            exc->GS.freeVector.x != 0                          &&
++           exc->GS.freeVector.y == 0                          &&
+            !( exc->sph_tweak_flags & SPH_TWEAK_NORMAL_ROUND ) )
+         control_value_cutin = 0;
+     }
+-- 
+2.17.1
+

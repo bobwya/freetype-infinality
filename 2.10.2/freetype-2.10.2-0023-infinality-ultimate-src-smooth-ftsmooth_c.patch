@@ -2514,8 +2514,8 @@ index ef176bdf1..8c2cf0c52 100644
      /* set up parameters */
      params.target = bitmap;
 @@ -200,6 +2643,129 @@
- 
- #ifdef FT_CONFIG_OPTION_SUBPIXEL_RENDERING
+     if ( error )
+       goto Exit;
  
 +#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
 +    if ( ppem <= MAX_PPEM && ppem >= MIN_PPEM )
@@ -2640,37 +2640,35 @@ index ef176bdf1..8c2cf0c52 100644
 +    }
 +    FT_Outline_Done( slot->library, outline_orig );
 +#endif
-       /* finally apply filtering */
-       {
-         FT_Byte*                 lcd_weights;
-@@ -221,10 +2787,27 @@
+     /* finally apply filtering */
+     if ( hmul || vmul )
+     {
+@@ -221,8 +2787,25 @@
  
-         if ( lcd_filter_func )
-           lcd_filter_func( bitmap, lcd_weights );
+       if ( lcd_filter_func )
+         lcd_filter_func( bitmap, lcd_weights );
 +
 +#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
-+        if ( grayscale_filter_strength > 0 )
-+          _ft_lcd_grayscale_filter( bitmap,
-+                                    mode,
-+                                    grayscale_filter_strength,
-+                                    slot->library );
++      if ( grayscale_filter_strength > 0 )
++        _ft_lcd_grayscale_filter( bitmap,
++                                  mode,
++                                  grayscale_filter_strength,
++                                  slot->library );
 +
 +#endif
-       }
-
- #endif /* FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
+     }
  
 +#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
-+      /* Global values */
-+      if ( brightness_value != 0 || contrast_value != 0 )
++    /* Global values */
++    if ( brightness_value != 0 || contrast_value != 0 )
 +        _ft_bitmap_bc ( bitmap,
 +                        (float)brightness_value / 300.0,
 +                        (float)contrast_value / 300.0);
 +#endif
 +
-     }
+ #else /* !FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
  
-   Exit:
+     if ( hmul )  /* lcd */
 -- 
 2.17.1
 

@@ -1,0 +1,37 @@
+From 28b2acb0f02b648b053d3150de702c913bedd8e4 Mon Sep 17 00:00:00 2001
+From: Robert Walker <bob.mt.wya@gmail.com>
+Date: Wed, 29 May 2019 00:13:06 +1000
+Subject: [PATCH 07/24] Infinality 2.10.0 (src/autofit/afmodule.c)
+
+---
+ src/autofit/afmodule.c             |    7 +
+ 1 file changed, 7 insertions(+), 0 deletions(-)
+
+diff --git a/src/autofit/afmodule.c b/src/autofit/afmodule.c
+index dcaa17a27..aa349d58e 100644
+--- a/src/autofit/afmodule.c
++++ b/src/autofit/afmodule.c
+@@ -22,6 +22,10 @@
+ #include "afloader.h"
+ #include "aferrors.h"
+ 
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++#include "../base/ftinf.h"
++#endif
++
+ #ifdef FT_DEBUG_AUTOFIT
+ 
+ #ifndef FT_MAKE_OPTION_SINGLE_OBJECT
+@@ -477,6 +481,9 @@
+     module->warping           = 0;
+ #endif
+     module->no_stem_darkening = TRUE;
++#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
++    if(ftinf) module->no_stem_darkening = !ftinf->stem_darkening_autofit;
++#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
+ 
+     module->darken_params[0]  = CFF_CONFIG_OPTION_DARKENING_PARAMETER_X1;
+     module->darken_params[1]  = CFF_CONFIG_OPTION_DARKENING_PARAMETER_Y1;
+-- 
+2.17.1
+
